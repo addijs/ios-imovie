@@ -12,6 +12,7 @@ class MovieViewController: UIViewController {
     
     var database: Database!
     var movie: Movie!
+    var movieToEdit: Int!
     
     @IBOutlet weak var tfTitle: UITextField!
     @IBOutlet weak var switchOscar: UISwitch!
@@ -43,9 +44,35 @@ class MovieViewController: UIViewController {
             isOscarNominated: isOscarNominated
         )
         
-        self.database = (UIApplication.shared.delegate as! AppDelegate).database
-        self.database.add(movie: movie)
+        if (movieToEdit != nil) {
+            self.database.update(index: movieToEdit, movie: movie)
+        } else {
+            self.database.add(movie: movie)
+        }
         
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.database = (UIApplication.shared.delegate as! AppDelegate).database
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        var movie: Movie!
+        
+        if (movieToEdit != nil) {
+            movie = self.database.get(index: movieToEdit)
+            
+            self.tfTitle.text = movie.title
+            self.sliderRating.value = Float(movie.rating)
+            self.lbRating.text = String(movie.rating)
+            self.stepperTimes.value = Double(movie.timesWatched)
+            self.lbTimes.text = String(movie.timesWatched)
+            self.switchOscar.isOn = movie.isOscarNominated
+        }
     }
 }

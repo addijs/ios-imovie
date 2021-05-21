@@ -23,6 +23,24 @@ class Database {
         return self.moviesList.count
     }
     
+    func get(index: Int) -> Movie {
+        return self.moviesList[index]
+    }
+    
+    func update(index: Int, movie: Movie) {
+        self.moviesList[index] = movie
+    }
+    
+    func remove(index: Int) {
+        self.moviesList.remove(at: index)
+    }
+    
+    func moveItem(from: Int, to: Int) {
+        let movieToMove = self.moviesList[from]
+        self.moviesList.remove(at: from)
+        self.moviesList.insert(movieToMove, at: to)
+    }
+    
     func getMovies() -> Array<Movie> {
         return self.moviesList
     }
